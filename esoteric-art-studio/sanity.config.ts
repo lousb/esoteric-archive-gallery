@@ -1,7 +1,7 @@
-import {defineConfig} from 'sanity'
-import {structureTool} from 'sanity/structure'
-import {visionTool} from '@sanity/vision'
-import {schemaTypes} from './schemaTypes'
+import {defineConfig} from 'sanity';
+import {structureTool} from 'sanity/structure';
+import {visionTool} from '@sanity/vision';
+import {schemaTypes} from './schemaTypes/schema'; // Correct import for schema types
 
 export default defineConfig({
   name: 'default',
@@ -13,6 +13,6 @@ export default defineConfig({
   plugins: [structureTool(), visionTool()],
 
   schema: {
-    types: schemaTypes,
+    types: schemaTypes, // Use the array of schemas directly
   },
-})
+});
