@@ -1,0 +1,80 @@
+/* Base styles for the gallery grid */
+.gallery-grid {
+    display: grid;
+    grid-gap: 1vw;
+
+    margin: auto;
+   
+  }
+  .gallery-wrap{
+    padding-top:3vw;
+  }
+  
+  /* 2 columns for tablet (768px to 1023px) */
+  @media(max-width: 1023px) {
+      .gallery-grid {
+        grid-template-columns: repeat(2, 1fr) !important;
+      }
+      .column-selector{
+        display: none;
+      }
+    }
+
+  /* 1 column for mobile (less than 768px) */
+  @media (max-width: 767px) {
+    .gallery-grid {
+      grid-template-columns: 1fr !important;
+    }
+  }
+  
+
+  
+  /* Styling individual items in the gallery */
+  .gallery-item {
+    overflow: hidden;
+    padding-bottom: 4em;
+    transition: transform 0.3s ease;
+    position: relative;
+  }
+  .gallery-item:has(.parallax-index){
+    padding-bottom: 4em;
+  }
+  .gallery-item .parallax-index{
+    position: absolute;
+    bottom:0;
+   
+  }
+  .gallery-item .image-container{
+    cursor: zoom-in;
+  }
+
+
+
+  .lightbox{
+    height: 100vh;
+    width: 100%;
+  }
+  .lightbox .lightbox-image-container{
+    user-select: none;
+    height: calc(100vh);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    position: fixed;
+    align-items: center;
+  }
+  .lightbox .lightbox-image-container img{
+    max-height: 80vh;
+    max-width: 60vw;
+  }
+  .lightbox-details-container-top{
+    position: fixed;
+    top:2.5vw;
+    z-index: 1;
+  }
+  .lightbox-details-container-bottom{
+    position: absolute;
+    bottom: 1.5vw;
+    z-index: 1;
+  }

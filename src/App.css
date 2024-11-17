@@ -1,0 +1,51 @@
+body{
+  background-color: white;
+  margin:0;
+
+
+}
+*{
+  font-family: var(--font-family);
+}
+a, p, span, h1, h2, h3, h4, h5{
+  color: black;
+  text-decoration: none;
+  font-weight:500;
+  margin:0;
+
+}
+a, p, span{
+  font-size: 16px;
+}
+.app-wrap{
+  width: 97%;
+  margin-inline: 1.5%;
+  min-height: 100vh;
+}
+.parallax-image-container, .lightbox-image-container, .text-reveal-element, .div-reveal-element  {
+  clip-path: inset(0%) !important;
+}
+.page-transitioning .text-reveal-element{
+  transition: all 780ms ease-in-out !important;
+  clip-path: inset(0% 0% 100%) !important;
+  transform: translateY(50%);
+}
+.page-transitioning .parallax-image-container, .page-transitioning .lightbox-image-container, .page-transitioning .div-reveal-element {
+  transition: all 780ms ease-out !important;
+  clip-path: inset(100% 0 0 0) !important;
+}
+
+@media (max-width: 767px) {
+.reveal-motion-span{
+  transform: translateY(0%) translateZ(0px) !important;
+  opacity: 1 !important;
+}
+.reveal-motion-span{
+  transform: translateY(0%) translateZ(0px) !important;
+  opacity: 1 !important;
+}
+.reveal-inner{
+  clip-path: inset(0%) !important;
+  transition: 0s !important;
+}
+}
