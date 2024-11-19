@@ -6,10 +6,29 @@
     margin: auto;
    
   }
-  .gallery-wrap{
-    padding-top:3vw;
+  .album-heading{
+    width: 75%;
+    padding-left: 25%;
+
+    
   }
-  
+  .div-reveal-element:has(> div > .album-heading){
+    position: relative;
+    z-index: 999;
+  }
+  .album-heading span{
+    font-size: 3.5vw;
+  }
+  .album-heading .column-selector{
+    margin-top:4.5svw;
+    height: 2.5svw;
+    display: flex;
+    align-items: center;
+    filter: grayscale(1);
+  }
+  .gallery-item .reveal-inner{
+    background-color: #EEEEEE;
+  }
   /* 2 columns for tablet (768px to 1023px) */
   @media(max-width: 1023px) {
       .gallery-grid {

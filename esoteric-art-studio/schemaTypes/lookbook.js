@@ -14,14 +14,7 @@ export default {
         title: 'Albums',
         type: 'array',
         of: [{ type: 'reference', to: [{ type: 'album' }] }],
-      },
-      {
-        name: 'description',
-        title: 'Description',
-        type: 'text',
-        rows: 3,
-        description: 'Optional short description for the lookbook.',
-      },
+      }
     ],
   };
   

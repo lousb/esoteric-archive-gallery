@@ -12,10 +12,12 @@ a, p, span, h1, h2, h3, h4, h5{
   text-decoration: none;
   font-weight:500;
   margin:0;
+  letter-spacing: -0.04em;
 
 }
 a, p, span{
   font-size: 16px;
+  
 }
 .app-wrap{
   width: 97%;
@@ -32,7 +34,7 @@ a, p, span{
 }
 .page-transitioning .parallax-image-container, .page-transitioning .lightbox-image-container, .page-transitioning .div-reveal-element {
   transition: all 780ms ease-out !important;
-  clip-path: inset(100% 0 0 0) !important;
+  clip-path: inset(0% 0% 100%) !important;
 }
 
 @media (max-width: 767px) {

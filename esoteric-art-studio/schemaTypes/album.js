@@ -20,6 +20,13 @@ export default {
       },
     },
     {
+      name: 'description',
+      title: 'Description',
+      type: 'text',
+      rows: 3,
+      description: 'Optional short description for the album.',
+    },
+    {
       name: 'images',
       title: 'Images',
       type: 'array',
@@ -30,5 +37,6 @@ export default {
       ],
       description: 'The images in this album with their metadata.',
     },
+    
   ],
 };

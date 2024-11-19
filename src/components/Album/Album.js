@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useParams } from "react-router-dom";
 import client from "../../client.js";
 import "./Album.css";
@@ -6,7 +6,10 @@ import ParallaxImage from "../atoms/parralax-image";
 import RevealDiv from "../atoms/reveal-div";
 import DelayLink from "../../utils/delayLink.js";
 import Reveal from "../atoms/text-reveal/index.js";
-import { ScrollTrigger } from "gsap/all";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import gsap from "gsap";
+
+gsap.registerPlugin(ScrollTrigger);
 
 export default function Album() {
   const [albumData, setAlbumData] = useState(null);
@@ -15,11 +18,57 @@ export default function Album() {
     const savedColumns = localStorage.getItem("gridColumns");
     return savedColumns ? parseInt(savedColumns, 10) : 4;
   });
+  const columnSelectorRef = useRef(null); 
 
   useEffect(() => {
     localStorage.setItem("gridColumns", columns);
     ScrollTrigger.refresh();
   }, [columns]);
+
+  useLayoutEffect(() => {
+    let observer;
+
+    const waitForElement = () => {
+      const columnSelector = columnSelectorRef.current;
+
+      if (columnSelector) {
+        // Initialize ScrollTrigger once the element exists
+        const trigger = ScrollTrigger.create({
+          trigger: columnSelector,
+          start: "top top",
+          end: () => (document.body.scrollHeight - window.innerHeight), // Pin starts when the element reaches the top of the viewport // Adjust to desired scroll length
+          pin: '.gallery-wrap > .div-reveal-element',
+          pinSpacing: false,
+        });
+
+        ScrollTrigger.refresh(); // Ensure accurate positions after initialization
+
+        // Cleanup
+        return () => trigger.kill();
+      }
+    };
+
+    // Use a MutationObserver to detect when `.column-selector` is added to the DOM
+    observer = new MutationObserver(() => {
+      if (columnSelectorRef.current) {
+        waitForElement();
+        observer.disconnect(); // Stop observing once the element is found
+      }
+    });
+
+    observer.observe(document.body, {
+      childList: true,
+      subtree: true,
+    });
+
+    return () => {
+      if (observer) observer.disconnect(); // Cleanup observer on unmount
+    };
+  }, []);
+  
+  
+  
+  
 
   useEffect(() => {
     client
@@ -34,7 +83,8 @@ export default function Album() {
               }
             },
             description
-          }
+          },
+          description
         }`,
         { slug }
       )
@@ -44,7 +94,8 @@ export default function Album() {
             ...image,
             index,
           }));
-          setAlbumData({ ...data[0], images: imagesWithIndex });
+          const description = data[0].description;
+          setAlbumData({ ...data[0], images: imagesWithIndex, description });
         } else {
           console.log("No album found");
         }
@@ -61,39 +112,47 @@ export default function Album() {
 
   return (
     <div className="gallery-wrap">
+
+        
+
       <RevealDiv>
-        <div className="column-selector">
-          <label>
-            <input
-              type="radio"
-              name="columns"
-              value="2"
-              checked={columns === 2}
-              onChange={() => setColumns(2)}
-            />
-            2 Columns
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="columns"
-              value="4"
-              checked={columns === 4}
-              onChange={() => setColumns(4)}
-            />
-            4 Columns
-          </label>
-          <label>
-            <input
-              type="radio"
-              name="columns"
-              value="8"
-              checked={columns === 8}
-              onChange={() => setColumns(8)}
-            />
-            8 Columns
-          </label>
+        <div className="album-heading">
+          <span>{albumData?.description ? albumData?.description : null}</span>
+          <div className="column-selector" ref={columnSelectorRef}>
+            <label>
+              <input
+                type="radio"
+                name="columns"
+                value="2"
+                checked={columns === 2}
+                onChange={() => setColumns(2)}
+              />
+              2 Columns
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="columns"
+                value="4"
+                checked={columns === 4}
+                onChange={() => setColumns(4)}
+              />
+              4 Columns
+            </label>
+            <label>
+              <input
+                type="radio"
+                name="columns"
+                value="8"
+                checked={columns === 8}
+                onChange={() => setColumns(8)}
+              />
+              8 Columns
+            </label>
+          </div>
+
         </div>
+        
       </RevealDiv>
       <div
         className="gallery-grid"
