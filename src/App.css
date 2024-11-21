@@ -36,8 +36,17 @@ a, p, span{
   transition: all 780ms ease-out !important;
   clip-path: inset(0% 0% 100%) !important;
 }
-
+@media(max-width: 1023px) {
+  .app-wrap{
+    margin-inline: 3%;
+    width: 94%;
+  }
+}
 @media (max-width: 767px) {
+  .app-wrap{
+    margin-inline: 4%;
+    width: 92%;
+  }
 .reveal-motion-span{
   transform: translateY(0%) translateZ(0px) !important;
   opacity: 1 !important;

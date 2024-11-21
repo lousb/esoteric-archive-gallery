@@ -1,11 +1,10 @@
-import sanityClient from "@sanity/client";
+import { createClient } from "@sanity/client";
 
-const client = sanityClient({
+const client = createClient({
     projectId: '3xolddto',
     dataset: 'production',
     useCdn: true,
-    apiVersion: '2024-11-16'
-    
+    apiVersion: '2024-11-16',
 });
 
 // Export the initialized client along with projectId and dataset values

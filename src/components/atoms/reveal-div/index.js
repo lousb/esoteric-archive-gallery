@@ -1,36 +1,30 @@
 import React, { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 
-function RevealDiv({ children, element = "div", elementClass = "" }) {
-    const [isVisible, setIsVisible] = useState(false);
+function RevealDiv({ children, element = "div", elementClass = "", onLoad = false }) {
+    const [isVisible, setIsVisible] = useState(onLoad);
     const ref = useRef(null);
 
     useEffect(() => {
-        const observer = new IntersectionObserver(
-            (entries) => {
-                const [entry] = entries;
+        if (onLoad) return; // Skip observer logic if onLoad is true
 
-                // Only set isVisible to true if the element is intersecting
+        const observer = new IntersectionObserver(
+            ([entry]) => {
                 if (entry.isIntersecting) {
                     setIsVisible(true);
                 }
             },
-            { threshold: 0.5 } // Adjust threshold as needed
+            { threshold: 0.5 }
         );
 
-        if (ref.current) {
-            observer.observe(ref.current);
-        }
+        if (ref.current) observer.observe(ref.current);
 
         return () => {
-            if (ref.current) {
-                observer.unobserve(ref.current);
-            }
+            if (ref.current) observer.unobserve(ref.current);
         };
-    }, []);
+    }, [onLoad]);
 
-    // Determine the motion component based on the "element" prop
-    const MotionComponent = motion[element] || motion.div; // Use motion.div as a fallback
+    const MotionComponent = motion[element] || motion.div;
 
     const revealAnimation = {
         initial: { clipPath: "inset(0% 0% 100% 0%)", transition: { duration: 1.4, ease: [0.76, 0, 0.24, 1] } },
@@ -38,20 +32,19 @@ function RevealDiv({ children, element = "div", elementClass = "" }) {
     };
 
     return (
-        <MotionComponent
-            ref={ref}
-            className={`div-reveal-element ${elementClass}`}
-        >
+        <MotionComponent ref={ref} className={`div-reveal-element ${elementClass}`}>
             <motion.div
                 className="reveal-inner"
                 variants={revealAnimation}
                 initial="initial"
-                animate={isVisible ? "open" : "initial"} // Remain in initial if not visible
+                animate={isVisible ? "open" : "initial"}
             >
+                {/* Render children immediately, animation can still depend on `isVisible` */}
                 {children}
             </motion.div>
         </MotionComponent>
     );
 }
+
 
 export default RevealDiv;

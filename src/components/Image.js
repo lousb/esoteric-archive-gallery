@@ -36,6 +36,7 @@ export default function Album() {
             index,
           }));
           setAlbumData({ ...data[0], images: imagesWithIndex });
+          window.scrollTo(0, 0);
         } else {
           console.log('No album found');
         }

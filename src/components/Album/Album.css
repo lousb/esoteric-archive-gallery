@@ -8,7 +8,8 @@
   }
   .album-heading{
     width: 75%;
-    padding-left: 25%;
+    left: 25%;
+    position: relative;
 
     
   }
@@ -35,7 +36,13 @@
         grid-template-columns: repeat(2, 1fr) !important;
       }
       .column-selector{
-        display: none;
+        display: none !important;
+      }
+      .album-heading{
+        padding-block: 4svw;
+      }
+      .gallery-item{
+        margin-bottom: 4svw;
       }
     }
 

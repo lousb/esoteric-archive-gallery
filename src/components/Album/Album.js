@@ -25,46 +25,26 @@ export default function Album() {
     ScrollTrigger.refresh();
   }, [columns]);
 
+  const columnSelector = columnSelectorRef.current;
+
   useLayoutEffect(() => {
     let observer;
 
-    const waitForElement = () => {
-      const columnSelector = columnSelectorRef.current;
-
-      if (columnSelector) {
-        // Initialize ScrollTrigger once the element exists
-        const trigger = ScrollTrigger.create({
+      let mm = gsap.matchMedia();
+      mm.add("(min-width: 1024px)", () => {
+        if(columnSelector){
+          const trigger = ScrollTrigger.create({
           trigger: columnSelector,
           start: "top top",
           end: () => (document.body.scrollHeight - window.innerHeight), // Pin starts when the element reaches the top of the viewport // Adjust to desired scroll length
           pin: '.gallery-wrap > .div-reveal-element',
           pinSpacing: false,
-        });
-
-        ScrollTrigger.refresh(); // Ensure accurate positions after initialization
-
-        // Cleanup
-        return () => trigger.kill();
-      }
-    };
-
-    // Use a MutationObserver to detect when `.column-selector` is added to the DOM
-    observer = new MutationObserver(() => {
-      if (columnSelectorRef.current) {
-        waitForElement();
-        observer.disconnect(); // Stop observing once the element is found
-      }
-    });
-
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-    });
-
-    return () => {
-      if (observer) observer.disconnect(); // Cleanup observer on unmount
-    };
-  }, []);
+          });
+        }
+        
+      });
+      
+  }, [columnSelector]);
   
   
   
@@ -95,7 +75,9 @@ export default function Album() {
             index,
           }));
           const description = data[0].description;
-          setAlbumData({ ...data[0], images: imagesWithIndex, description });
+          const title = data[0].title;
+          setAlbumData({ ...data[0], images: imagesWithIndex, description, title });
+          window.scrollTo(0, 0);
         } else {
           console.log("No album found");
         }
@@ -108,14 +90,20 @@ export default function Album() {
     window.dispatchEvent(new Event("resize"));
   }, [columns]);
 
+  useEffect(()=>{
+    document.title = `${albumData?.title ? albumData.title + ' - ' : ''} Esoteric Archive`;
+  },[albumData?.title]);
+
   if (!albumData) return <div>Loading...</div>;
+
+  
 
   return (
     <div className="gallery-wrap">
 
         
 
-      <RevealDiv>
+      <RevealDiv onLoad={true}>
         <div className="album-heading">
           <span>{albumData?.description ? albumData?.description : null}</span>
           <div className="column-selector" ref={columnSelectorRef}>
