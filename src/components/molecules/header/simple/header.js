@@ -3,6 +3,7 @@ import styles from './header.module.css';
 
 import { translate } from "./anim";
 import Hamburger from "../../../atoms/buttons/hamburger/hamburger.js";
+import DelayLink from "../../../../utils/delayLink.js";
 
 function Header() {
  
@@ -15,7 +16,10 @@ function Header() {
       <div className={styles["header-inner-content"]}> {/* Set class name for inner content */}
         {/* Header logo */}
         <div className={styles["header-logo"]}>
+          <DelayLink delay={800} to={'/'}>
           <img src="/LOGO-DESKTOP.png" alt="Logo"></img>
+          </DelayLink>
+
         </div>
       </div>
     </header>

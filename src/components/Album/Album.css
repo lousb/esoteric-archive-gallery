@@ -10,7 +10,7 @@
     width: 75%;
     left: 25%;
     position: relative;
-
+    pointer-events: all;
     
   }
   .div-reveal-element:has(> div > .album-heading){
@@ -29,6 +29,12 @@
   }
   .gallery-item .reveal-inner{
     background-color: #EEEEEE;
+  }
+  .gallery-wrap{
+    margin-top:-2.5vw;
+  }
+  .gallery-wrap > .pin-spacer, .gallery-wrap .div-reveal-element{
+    pointer-events: none;
   }
   /* 2 columns for tablet (768px to 1023px) */
   @media(max-width: 1023px) {

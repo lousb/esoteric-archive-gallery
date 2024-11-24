@@ -14,7 +14,7 @@ function RevealDiv({ children, element = "div", elementClass = "", onLoad = fals
                     setIsVisible(true);
                 }
             },
-            { threshold: 0.5 }
+            { threshold: 0.25 }
         );
 
         if (ref.current) observer.observe(ref.current);

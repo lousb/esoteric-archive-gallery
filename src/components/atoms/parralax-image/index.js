@@ -8,9 +8,9 @@ gsap.registerPlugin(ScrollTrigger);
 const ParallaxImage = forwardRef(({ url, className, index }, ref) => {
   const containerRef = useRef(null);
   const imageRef = useRef(null);
-  const [isReady, setIsReady] = useState(false); // State to check if the image is ready
+  const [isImageLoaded, setIsImageLoaded] = useState(false);
+  const [imageHeight, setImageHeight] = useState(0);
 
-  // Expose control methods to the parent via ref
   useImperativeHandle(ref, () => ({
     resetParallax: () => {
       if (imageRef.current) {
@@ -18,99 +18,79 @@ const ParallaxImage = forwardRef(({ url, className, index }, ref) => {
       }
     },
     updateParallax: () => {
-      applyParallax();
+      setupParallax();
     },
   }));
 
-  const applyParallax = () => {
+  const setupParallax = () => {
+    if (!containerRef.current || !imageRef.current || !isImageLoaded) return;
+
     const container = containerRef.current;
     const image = imageRef.current;
+    const maxParallax = imageHeight * 0.1;
 
-    if (!container || !image) return;
-
-    // Wait until the image is fully loaded and the height is valid
-    if (!isReady) return;
-
-    const imageHeight = image.offsetHeight;
-    const maxParallax = imageHeight * 0.1; // Max 10% of image height
-
-    gsap.to(image, {
-      y: 0, // Start with 0 position
-      ease: "none",
-      scrollTrigger: {
-        trigger: container,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: 1,
-        pin: false,
-        invalidateOnRefresh: true,
-        onUpdate: (self) => {
-          const progress = self.progress;
-          const translateY = maxParallax * (progress * 2 - 1); // From -maxParallax to +maxParallax
-          gsap.set(image, { y: translateY });
-        },
+    ScrollTrigger.create({
+      trigger: container,
+      start: "top bottom",
+      end: "bottom top",
+      scrub: 1,
+      onUpdate: (self) => {
+        const translateY = maxParallax * (self.progress * 2 - 1); // Calculate translateY from -maxParallax to +maxParallax
+        gsap.to(image, { y: translateY, overwrite: "auto", ease: "none" });
       },
+      invalidateOnRefresh: true,
     });
   };
 
-  const resetAndRefresh = () => {
+  const handleImageLoad = () => {
     if (imageRef.current) {
-      const image = imageRef.current;
-      gsap.to(image, {
-        y: 0, // Reset to initial position
-        duration: 0.4,
-        ease: "power1.out",
-        onComplete: () => {
-          ScrollTrigger.refresh(); // Ensure correct start and end points
-          applyParallax(); // Reapply parallax after refresh
-        },
-      });
+      setImageHeight(imageRef.current.offsetHeight);
+      setIsImageLoaded(true);
     }
   };
 
-  const handleImageLoad = () => {
-    setIsReady(true); // Set the image as ready once loaded
+  const handleResize = () => {
+    if (imageRef.current) {
+      const newHeight = imageRef.current.offsetHeight;
+      setImageHeight(newHeight);
+      ScrollTrigger.refresh(); // Ensure ScrollTrigger recalculates positions
+    }
   };
 
   useEffect(() => {
-    // Listen for image load to ensure it's ready
     const image = imageRef.current;
-    if (image) {
+
+    // Handle cases where the image is already loaded
+    if (image.complete) {
+      handleImageLoad();
+    } else {
       image.addEventListener("load", handleImageLoad);
     }
 
+    const resizeObserver = new ResizeObserver(() => {
+      // Avoid direct DOM updates inside the ResizeObserver
+      requestAnimationFrame(() => {
+        handleResize();
+      });
+    });
+
+    if (image) {
+      resizeObserver.observe(image);
+    }
+
     return () => {
-      if (image) {
-        image.removeEventListener("load", handleImageLoad);
-      }
+      image.removeEventListener("load", handleImageLoad);
+      resizeObserver.disconnect();
+      ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); // Clean up all ScrollTriggers
     };
   }, []);
 
+
   useEffect(() => {
-    // Apply parallax only after image is ready
-    if (isReady) {
-      applyParallax();
+    if (isImageLoaded && imageHeight > 0) {
+      setupParallax();
     }
-
-    const handleResize = debounce(() => {
-      resetAndRefresh();
-    }, 200);
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill());
-    };
-  }, [isReady]); // Re-run when image is ready
-
-  const debounce = (func, delay) => {
-    let timeout;
-    return (...args) => {
-      clearTimeout(timeout);
-      timeout = setTimeout(() => func(...args), delay);
-    };
-  };
+  }, [isImageLoaded, imageHeight]); // Run setup when image is loaded and height is available
 
   return (
     <div className="parallax-wrap">

@@ -12,6 +12,7 @@ export default function Album() {
   const [cursorStyle, setCursorStyle] = useState("default");
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     client
       .fetch(
         `*[_type == "album" && slug.current == $slug]{
@@ -36,7 +37,7 @@ export default function Album() {
             index,
           }));
           setAlbumData({ ...data[0], images: imagesWithIndex });
-          window.scrollTo(0, 0);
+        
         } else {
           console.log('No album found');
         }
@@ -55,7 +56,7 @@ export default function Album() {
   const currentImageIndex = parseInt(index, 10) - 1; // Adjust index by 1 for 0-based array indexing
   const currentImage = albumData ? albumData.images[currentImageIndex] : null;
 
-  if (!albumData || !currentImage) return <div>Loading...</div>;
+  if (!albumData || !currentImage) return <Reveal element="p" textContent={'Loading...'}/>;
 
   const handleNavigate = (direction) => {
     let newIndex = currentImageIndex + direction;
@@ -95,7 +96,7 @@ export default function Album() {
       style={{ cursor: cursorStyle }}>
         <div className="lightbox-details-container-top">
         <DelayLink to={`/album/${albumData.title.replace(/\s+/g, '-').toLowerCase()}`} delay={800}>
-            <Reveal textContent={albumData.title} element="h2"/>
+            <Reveal textContent={albumData.title} element="h3"/>
           </DelayLink>
         </div>
         <div className="lightbox-image-container" onClick={handleClick}>

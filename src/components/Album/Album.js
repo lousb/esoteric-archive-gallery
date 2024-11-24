@@ -51,6 +51,7 @@ export default function Album() {
   
 
   useEffect(() => {
+    window.scrollTo(0, 0);
     client
       .fetch(
         `*[_type == "album" && slug.current == $slug]{
@@ -77,7 +78,7 @@ export default function Album() {
           const description = data[0].description;
           const title = data[0].title;
           setAlbumData({ ...data[0], images: imagesWithIndex, description, title });
-          window.scrollTo(0, 0);
+
         } else {
           console.log("No album found");
         }
@@ -94,7 +95,7 @@ export default function Album() {
     document.title = `${albumData?.title ? albumData.title + ' - ' : ''} Esoteric Archive`;
   },[albumData?.title]);
 
-  if (!albumData) return <div>Loading...</div>;
+  if (!albumData) return <Reveal element={'p'} textContent={'Loading...'}/>;
 
   
 
@@ -150,7 +151,8 @@ export default function Album() {
           <React.Fragment key={img.index}>
             <div className="gallery-item">
               <DelayLink to={`/album/${slug}/${img.index + 1}`} delay={800}>
-                <RevealDiv>
+                {/* Add key to force re-render on columns change */}
+                <RevealDiv key={`reveal-${columns}-${index}`} onLoad={index < columns}> 
                   <ParallaxImage
                     url={img.image.asset.url}
                     className="image-container"
@@ -172,6 +174,7 @@ export default function Album() {
             {(index + 1) % 5 === 0 && <div className="gallery-item empty-item" />}
           </React.Fragment>
         ))}
+
       </div>
     </div>
   );

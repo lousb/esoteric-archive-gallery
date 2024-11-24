@@ -7,6 +7,15 @@ body{
 *{
   font-family: var(--font-family);
 }
+img{
+  filter: grayscale(1);
+}
+h1 span, h2 span{
+  font-size: 3.5vw;
+}
+h3 span{
+  font-size: 1.5vw;
+}
 a, p, span, h1, h2, h3, h4, h5{
   color: black;
   text-decoration: none;
@@ -23,6 +32,7 @@ a, p, span{
   width: 97%;
   margin-inline: 1.5%;
   min-height: 100vh;
+  padding-top: 2.5vw;
 }
 .parallax-image-container, .lightbox-image-container, .text-reveal-element, .div-reveal-element  {
   clip-path: inset(0%) !important;
@@ -35,6 +45,11 @@ a, p, span{
 .page-transitioning .parallax-image-container, .page-transitioning .lightbox-image-container, .page-transitioning .div-reveal-element {
   transition: all 780ms ease-out !important;
   clip-path: inset(0% 0% 100%) !important;
+}
+@media(max-width: 1023px) {
+  .app-wrap{
+
+  }
 }
 @media(max-width: 1023px) {
   .app-wrap{

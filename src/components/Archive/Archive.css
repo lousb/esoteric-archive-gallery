@@ -1,0 +1,41 @@
+.archive-page{
+    position: relative;
+}
+.album-item-wrap:has(.album-item:hover) .album-image{
+    display: block !important;
+}
+.album-image{
+    max-height: calc(100vh - 10vw);
+    object-fit: cover;
+    object-position: center;
+}
+.album-image-wrap{
+    position: fixed;
+    right: 1.5vw;
+    bottom: 1.5vw;
+}
+.album-image-wrap .album-image{
+    max-width: 23vw;
+}
+.album-item-wrap > a, .album-item{
+    width: max-content;
+    display: block;
+}
+.archive-page > .text-reveal-element{
+    position: fixed;
+    bottom: 1.5vw;
+    right: 1.5vw;
+}
+.archive-page > .div-reveal-element h2{
+    font-size: 3.5vw;
+    padding-bottom: 1em;
+}
+
+@media(max-width: 1023px) {
+    
+  }
+
+/* 1 column for mobile (less than 768px) */
+@media (max-width: 767px) {
+  
+}

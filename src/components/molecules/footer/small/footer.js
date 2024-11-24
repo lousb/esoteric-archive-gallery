@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
 import styles from './footer.module.css';
+import DelayLink from "../../../../utils/delayLink";
 
 function Footer() {
     const currentYear = new Date().getFullYear();
@@ -61,7 +62,10 @@ function Footer() {
             <div className={styles["footer-wrap"]}>
                 <div className={styles["footer-col-1"]}>
                     <div className={styles["header-logo"]}>
+                        <DelayLink to={'/'} delay={800}>
                         <img src="/LOGO-DESKTOP.png" alt="Logo" />
+                        </DelayLink>
+            
                     </div>
                 </div>
                 <div className={styles["footer-col-2"]}></div>

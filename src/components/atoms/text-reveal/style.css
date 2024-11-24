@@ -1,5 +1,13 @@
 .text-reveal-element{
     display: flex;
     overflow: hidden;
-    width: fit-content;
+    width: 100%;
+    max-width: max-content;
+    flex-wrap: wrap;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: normal;
+}
+.reveal-motion-span{
+    display: inline-flex;
 }
