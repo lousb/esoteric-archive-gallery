@@ -1,14 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>404 - Not Found</title>
+    <title>Redirecting...</title>
   </head>
   <body>
     <script>
-      // This will redirect the user to the index.html for React Router to handle the route
-      window.location.replace('/');
+      // Redirect to the React app's entry point
+      window.location.replace(
+        `${window.location.origin}${window.location.pathname}`
+      );
     </script>
   </body>
 </html>
