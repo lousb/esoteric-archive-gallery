@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate, Link } from "react-router-dom";
-import client from "../client";
-import Reveal from "./atoms/text-reveal";
-import RevealDiv from "./atoms/reveal-div";
-import DelayLink from "../utils/delayLink";
+import client from "../../../../client";
+import Reveal from "../../../atoms/text-reveal";
+import RevealDiv from "../../../atoms/reveal-div";
+import DelayLink from "../../../../utils/delayLink";
 
 export default function Album() {
   const { slug, index } = useParams(); // Destructure params directly here

@@ -52,40 +52,43 @@ export default function LookbookAlbums() {
         </h2>
       </RevealDiv>
       <Reveal element={'p'} textContent={'(Hover to view album)'}/>
+      <div className="album-items">
       {albums.length > 0 ? (
-        albums.map((album) => {
-          const firstImage =
-            album.images && album.images.length > 0
-              ? album.images[0].image.asset.url
-              : null;
+          albums.map((album) => {
+            const firstImage =
+              album.images && album.images.length > 0
+                ? album.images[0].image.asset.url
+                : null;
 
-          return (
-            <div className="album-item-wrap">
-            <DelayLink delay={800} to={"/album/" + album.slug.current} key={album._id}>
-              <div className="album-item">
-                <Reveal textContent={album.title} element={"h2"} />
+            return (
+              <div className="album-item-wrap">
+              <DelayLink delay={800} to={"/album/" + album.slug.current} key={album._id}>
+                <div className="album-item">
+                  <Reveal textContent={album.title} element={"h2"} />
+                </div>
+              </DelayLink>
+
+              <div className="album-image-wrap">
+
+                {firstImage ? (
+                  <RevealDiv onLoad={true}>
+                    <img src={firstImage} alt={album.title} className="album-image" style={{display:'none'}}/>
+                  </RevealDiv>
+                ) : (
+                  <Reveal element={'p'} textContent={'No image available'}/>
+                )}
               </div>
-            </DelayLink>
-    
-            <div className="album-image-wrap">
-              
-              {firstImage ? (
-                <RevealDiv onLoad={true}>
-                  <img src={firstImage} alt={album.title} className="album-image" style={{display:'none'}}/>
-                </RevealDiv>
-              ) : (
-                <Reveal element={'p'} textContent={'No image available'}/>
-              )}
-            </div>
-  
-            </div>
-            
-            
-          );
-        })
-      ) : (
-        <Reveal element={'p'} textContent={'No albums available'}/>
-      )}
+
+              </div>
+
+
+            );
+          })
+        ) : (
+          <Reveal element={'p'} textContent={'No albums available'}/>
+        )}
+      </div>
+     
     </div>
   );
 }

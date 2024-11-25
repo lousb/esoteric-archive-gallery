@@ -1,18 +1,38 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from './footer.module.css';
 import DelayLink from "../../../../utils/delayLink";
 
 function Footer() {
     const currentYear = new Date().getFullYear();
     const [text, setText] = useState(""); // This will hold the progressively added "e"s
+    const [isDarkMode, setIsDarkMode] = useState(false); // State for dark mode
     const intervalRef = useRef(null); // Ref to track the interval
     const isHovered = useRef(false); // Ref to check hover state
     const textRef = useRef(text); // Ref to hold the current state of text
 
     // Update textRef whenever the text state changes
-    React.useEffect(() => {
+    useEffect(() => {
         textRef.current = text;
     }, [text]);
+
+    // Load dark mode preference from localStorage when the component mounts
+    useEffect(() => {
+        const savedMode = localStorage.getItem('isDarkMode');
+        if (savedMode) {
+            setIsDarkMode(JSON.parse(savedMode)); // Set the state based on saved preference
+        }
+    }, []);
+
+    // Update the body class based on dark mode state
+    useEffect(() => {
+        if (isDarkMode) {
+            document.body.classList.add('dark');
+            localStorage.setItem('isDarkMode', JSON.stringify(true)); // Save dark mode preference
+        } else {
+            document.body.classList.remove('dark');
+            localStorage.setItem('isDarkMode', JSON.stringify(false)); // Save light mode preference
+        }
+    }, [isDarkMode]);
 
     // Handle hover start (enter)
     const handleHoverStart = () => {
@@ -51,11 +71,16 @@ function Footer() {
     };
 
     // Cleanup intervals on component unmount
-    React.useEffect(() => {
+    useEffect(() => {
         return () => {
             if (intervalRef.current) clearInterval(intervalRef.current);
         };
     }, []);
+
+    // Toggle dark mode
+    const handleModeToggle = () => {
+        setIsDarkMode((prevMode) => !prevMode);
+    };
 
     return (
         <footer className={styles["footer"]}>
@@ -63,12 +88,25 @@ function Footer() {
                 <div className={styles["footer-col-1"]}>
                     <div className={styles["header-logo"]}>
                         <DelayLink to={'/'} delay={800}>
-                        <img src="/LOGO-DESKTOP.png" alt="Logo" />
+                            <img src="/LOGO-DESKTOP.png" alt="Logo" />
                         </DelayLink>
-            
                     </div>
                 </div>
-                <div className={styles["footer-col-2"]}></div>
+                <div className={styles["footer-col-2"]}>
+                    {/* Toggle button for dark mode */}
+                    <div>
+                        <label className={styles["toggle-label"]}>
+                            Mode: {isDarkMode ? "Dark" : "Light"}
+                            <input
+                                type="checkbox"
+                                checked={isDarkMode}
+                                onChange={handleModeToggle}
+                                className={styles["mode-toggle"]}
+                            />
+                            <span className={styles["toggle-slider"]}></span>
+                        </label>
+                    </div>
+                </div>
                 <div className={styles["footer-col-3"]}></div>
                 <div className={styles["footer-col-4"]}>
                     <p>Esoteric Art Studio © {currentYear}</p>

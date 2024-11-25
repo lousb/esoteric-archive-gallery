@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import AllPosts from "./components/Archive/Archive.js";
 import OnePost from "./components/Album/Album.js";
 import { createClient } from "@sanity/client"
-import Album from "./components/Image.js";
+import Album from "./components/molecules/Image/Navigate/Image.js";
 import Header from './components/molecules/header/simple/header';
 import Footer from './components/molecules/footer/small/footer.js';
 import Lenis from "@studio-freight/lenis";
@@ -43,6 +43,7 @@ function App() {
   }, []);
 
   return (
+    <div className="App">
     <BrowserRouter>
       <Header/>
       <div className="app-wrap">
@@ -55,6 +56,8 @@ function App() {
       </div>
       <Footer/>
     </BrowserRouter>
+    </div>
+   
   );
 }
 

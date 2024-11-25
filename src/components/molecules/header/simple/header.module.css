@@ -106,6 +106,10 @@ p{
     position: relative;
     pointer-events: all;
 }
+.header-logo > a{
+    font-size: 0px;
+    height: fit-content;
+}
 @media(max-width: 1023px) {
  .header-inner-content{
    padding-inline: 3%;

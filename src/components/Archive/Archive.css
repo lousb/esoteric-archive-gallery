@@ -4,6 +4,15 @@
 .album-item-wrap:has(.album-item:hover) .album-image{
     display: block !important;
 }
+.archive-page:has(.album-item:hover) > .text-reveal-element{
+    display: none;
+}
+.archive-page:has(.album-item:hover) .album-item{
+    opacity: 0.6;
+}
+.album-item:hover{
+    opacity: 1 !important;
+}
 .album-image{
     max-height: calc(100vh - 10vw);
     object-fit: cover;
@@ -30,7 +39,13 @@
     font-size: 3.5vw;
     padding-bottom: 1em;
 }
-
+.album-items{
+    display: flex;
+    flex-direction: column;
+    justify-content: end;
+    min-height:calc(100vh - 15.5vw);
+    height: max-content;
+}
 @media(max-width: 1023px) {
     
   }

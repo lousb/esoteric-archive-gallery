@@ -10,6 +10,7 @@ const ParallaxImage = forwardRef(({ url, className, index }, ref) => {
   const imageRef = useRef(null);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const [imageHeight, setImageHeight] = useState(0);
+  const parallaxTriggerRef = useRef(null); // Store the parallax ScrollTrigger instance
 
   useImperativeHandle(ref, () => ({
     resetParallax: () => {
@@ -29,17 +30,20 @@ const ParallaxImage = forwardRef(({ url, className, index }, ref) => {
     const image = imageRef.current;
     const maxParallax = imageHeight * 0.1;
 
-    ScrollTrigger.create({
-      trigger: container,
-      start: "top bottom",
-      end: "bottom top",
-      scrub: 1,
-      onUpdate: (self) => {
-        const translateY = maxParallax * (self.progress * 2 - 1); // Calculate translateY from -maxParallax to +maxParallax
-        gsap.to(image, { y: translateY, overwrite: "auto", ease: "none" });
-      },
-      invalidateOnRefresh: true,
-    });
+    // Create the parallax ScrollTrigger only if it doesn't already exist
+    if (!parallaxTriggerRef.current) {
+      parallaxTriggerRef.current = ScrollTrigger.create({
+        trigger: container,
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1,
+        onUpdate: (self) => {
+          const translateY = maxParallax * (self.progress * 2 - 1); // Calculate translateY from -maxParallax to +maxParallax
+          gsap.to(image, { y: translateY, overwrite: "auto", ease: "none" });
+        },
+        invalidateOnRefresh: true,
+      });
+    }
   };
 
   const handleImageLoad = () => {
@@ -78,13 +82,15 @@ const ParallaxImage = forwardRef(({ url, className, index }, ref) => {
       resizeObserver.observe(image);
     }
 
+    // Cleanup: only kill the specific parallax ScrollTrigger
     return () => {
+      if (parallaxTriggerRef.current) {
+        parallaxTriggerRef.current.kill();
+      }
       image.removeEventListener("load", handleImageLoad);
       resizeObserver.disconnect();
-      ScrollTrigger.getAll().forEach((trigger) => trigger.kill()); // Clean up all ScrollTriggers
     };
-  }, []);
-
+  }, []); // Only run once when the component is mounted
 
   useEffect(() => {
     if (isImageLoaded && imageHeight > 0) {

@@ -28,23 +28,40 @@ export default function Album() {
   const columnSelector = columnSelectorRef.current;
 
   useLayoutEffect(() => {
-    let observer;
+    // Create the ScrollTrigger only once and update it when the column count changes
+    let trigger;
 
-      let mm = gsap.matchMedia();
-      mm.add("(min-width: 1024px)", () => {
-        if(columnSelector){
-          const trigger = ScrollTrigger.create({
-          trigger: columnSelector,
-          start: "top top",
-          end: () => (document.body.scrollHeight - window.innerHeight), // Pin starts when the element reaches the top of the viewport // Adjust to desired scroll length
-          pin: '.gallery-wrap > .div-reveal-element',
-          pinSpacing: false,
+    const updateScrollTrigger = () => {
+      if (columnSelector) {
+        // If the trigger already exists, update its pinning and scroll positions
+        if (trigger) {
+          trigger.scroll(); // Force ScrollTrigger to update
+          trigger.refresh(); // Refresh to reflect any DOM changes
+        } else {
+          // Create the ScrollTrigger only the first time
+          trigger = ScrollTrigger.create({
+            trigger: columnSelector,
+            start: "top top",
+            end: () => document.body.scrollHeight - window.innerHeight,
+            pin: ".gallery-wrap > .div-reveal-element",
+            pinSpacing: false,
           });
         }
-        
-      });
-      
-  }, [columnSelector]);
+      }
+    };
+
+    // Call the update function when columns or columnSelector changes
+    updateScrollTrigger();
+
+    // Cleanup when the component unmounts or columnSelector changes
+    return () => {
+      if (trigger) {
+        trigger.kill();
+      }
+    };
+  }, [columnSelector, columns]);  // Dependency on columnSelector and columns
+  
+  
   
   
   
@@ -153,7 +170,7 @@ export default function Album() {
               <DelayLink to={`/album/${slug}/${img.index + 1}`} delay={800}>
                 {/* Add key to force re-render on columns change */}
                 <RevealDiv key={`reveal-${columns}-${index}`} onLoad={index < columns}> 
-                  <ParallaxImage
+                <ParallaxImage
                     url={img.image.asset.url}
                     className="image-container"
                     index={`${index + 1}`}
