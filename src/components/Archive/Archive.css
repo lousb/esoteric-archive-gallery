@@ -47,10 +47,22 @@
     height: max-content;
 }
 @media(max-width: 1023px) {
-    
+    .album-items{
+        justify-content: start;
+    }
+    .archive-page > .text-reveal-element{
+      display: none;
+    }
+    .album-image-wrap .album-image{
+      display: none;
+    }
+  
   }
 
 /* 1 column for mobile (less than 768px) */
 @media (max-width: 767px) {
+  .archive-page h2, .archive-page h2 span{
+      font-size: 5vw !important;
+  }
   
 }

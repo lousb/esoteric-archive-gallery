@@ -61,6 +61,12 @@
       .gallery-item{
         margin-bottom: 4svw;
       }
+      .lightbox-image-container{
+        width: 94vw !important;
+      }
+      .lightbox-details-container-bottom{
+        bottom: 3vw !important;
+      }
     }
 
   /* 1 column for mobile (less than 768px) */
@@ -68,6 +74,12 @@
     
     .gallery-grid {
       grid-template-columns: 1fr !important;
+    }
+    .lightbox-image-container{
+      width: 92vw !important;
+    }
+    .lightbox-details-container-bottom{
+      bottom: 4vw !important;
     }
   }
   
